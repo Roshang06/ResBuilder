@@ -12,15 +12,14 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // Redirect after login
-    } catch (err) {
-      setError("Invalid email or password");
+      navigate("/dashboard"); // Redirect to Dashboard
+    } catch (error) {
+      console.error("Error logging in:", error.message);
     }
   };
+  
 
   return (
     <div className="auth-container">
