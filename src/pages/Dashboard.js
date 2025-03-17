@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase"; // ✅ Import Firestore
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore"; // ✅ Firestore functions
 import { useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
 
@@ -9,12 +10,12 @@ function Dashboard() {
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
-  // ✅ Load projects from local storage when user logs in
+  // ✅ Listen for authentication state changes and fetch projects
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        loadProjects(currentUser.uid);
+        await fetchProjects(currentUser.uid);
       } else {
         setProjects([]);
         navigate("/login");
@@ -24,31 +25,36 @@ function Dashboard() {
     return () => unsubscribe();
   }, [navigate]);
 
-  // ✅ Load projects from local storage per user
-  const loadProjects = (userId) => {
-    const savedProjects = localStorage.getItem(`projects_${userId}`);
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
+  // ✅ Fetch resume projects from Firestore
+  const fetchProjects = async (userId) => {
+    try {
+      const q = query(collection(db, "projects"), where("userId", "==", userId));
+      const querySnapshot = await getDocs(q);
+      const loadedProjects = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setProjects(loadedProjects);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
     }
   };
 
-  // ✅ Save projects to local storage per user
-  const saveProjects = (userId, projects) => {
-    localStorage.setItem(`projects_${userId}`, JSON.stringify(projects));
-  };
-
-  // ✅ Add new project and save to local storage
-  const addNewProject = () => {
+  // ✅ Add new resume project to Firestore
+  const addNewProject = async () => {
     if (!user) return;
 
-    const newProject = {
-      id: projects.length + 1,
-      title: `New Resume Project ${projects.length + 1}`,
-    };
+    try {
+      const newProject = {
+        userId: user.uid,
+        title: `New Resume Project ${projects.length + 1}`,
+      };
 
-    const updatedProjects = [...projects, newProject];
-    setProjects(updatedProjects);
-    saveProjects(user.uid, updatedProjects); // ✅ Save to local storage
+      const docRef = await addDoc(collection(db, "projects"), newProject);
+      setProjects((prevProjects) => [...prevProjects, { id: docRef.id, ...newProject }]); // ✅ Keep existing projects
+    } catch (error) {
+      console.error("Error adding project:", error);
+    }
   };
 
   // ✅ Navigate to resume editor
@@ -92,6 +98,7 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 
 
