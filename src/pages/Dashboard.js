@@ -40,7 +40,7 @@ function Dashboard() {
     }
   };
 
-  // ✅ Add new resume project to Firestore
+  // ✅ Add new resume project to Firestore with default title
   const addNewProject = async () => {
     if (!user) return;
 
@@ -48,10 +48,14 @@ function Dashboard() {
       const newProject = {
         userId: user.uid,
         title: `New Resume Project ${projects.length + 1}`,
+        projectName: `New Resume Project ${projects.length + 1}`, // Set both title and projectName
+        workExperiences: [], // Initialize with empty array
+        skills: [], // Initialize with empty array
+        languages: [], // Initialize with empty array
       };
 
       const docRef = await addDoc(collection(db, "projects"), newProject);
-      setProjects((prevProjects) => [...prevProjects, { id: docRef.id, ...newProject }]); // ✅ Keep existing projects
+      setProjects((prevProjects) => [...prevProjects, { id: docRef.id, ...newProject }]);
     } catch (error) {
       console.error("Error adding project:", error);
     }
@@ -89,7 +93,7 @@ function Dashboard() {
         </div>
         {projects.map((project) => (
           <div className="project-card" key={project.id} onClick={() => openResumeEditor(project.id)}>
-            <h2>{project.title}</h2>
+            <h2>{project.projectName || project.title}</h2>
           </div>
         ))}
       </div>
@@ -98,8 +102,5 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-
-
 
 

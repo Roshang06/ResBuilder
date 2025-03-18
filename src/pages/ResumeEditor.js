@@ -8,8 +8,28 @@ const ResumeEditor = () => {
   const { id } = useParams(); // Get the resume ID from the URL
   const navigate = useNavigate(); // Add navigate for redirection
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // State for delete confirmation popup
+  
+  // Predefined lists for dropdowns
+  const predefinedSkills = [
+    "JavaScript", "React", "Node.js", "HTML", "CSS", "Python", "Java", "C++", "SQL", 
+    "Firebase", "MongoDB", "AWS", "Project Management", "Communication", "Problem Solving",
+    "Leadership", "Teamwork", "Microsoft Office", "Data Analysis", "Machine Learning"
+  ];
+  
+  const predefinedLanguages = [
+    "English", "Spanish", "French", "German", "Chinese", "Japanese", "Russian", "Arabic",
+    "Portuguese", "Italian", "Korean", "Hindi", "Dutch", "Swedish", "Norwegian"
+  ];
 
-  // ✅ Ensure `workExperiences` is always an array
+  // States for dropdown input
+  const [skillInput, setSkillInput] = useState("");
+  const [languageInput, setLanguageInput] = useState("");
+  const [filteredSkills, setFilteredSkills] = useState([]);
+  const [filteredLanguages, setFilteredLanguages] = useState([]);
+  const [showSkillsDropdown, setShowSkillsDropdown] = useState(false);
+  const [showLanguagesDropdown, setShowLanguagesDropdown] = useState(false);
+
+  // ✅ Ensure proper data structure for the state
   const [resume, setResume] = useState({
     projectName: "",
     jobPosition: "",
@@ -19,11 +39,11 @@ const ResumeEditor = () => {
     city: "",
     state: "",
     country: "",
-    profileSummary: "",
-    priorEducation: "",
-    skills: "",
-    workExperiences: [], // ✅ Always set this as an empty array
-    languages: "",
+    professionalSummary: "",
+    education: "",
+    skills: [], // Array for multiple skills
+    workExperiences: [], // Array for work experiences
+    languages: [], // Array for multiple languages
   });
 
   // ✅ Fetch resume details from Firestore
@@ -36,7 +56,11 @@ const ResumeEditor = () => {
         const data = docSnap.data();
         setResume({
           ...data,
-          workExperiences: data.workExperiences || [], // ✅ Ensure this is always an array
+          professionalSummary: data.professionalSummary || "",
+          education: data.education || "",
+          skills: Array.isArray(data.skills) ? data.skills : [],
+          workExperiences: Array.isArray(data.workExperiences) ? data.workExperiences : [],
+          languages: Array.isArray(data.languages) ? data.languages : [],
         });
       }
     };
@@ -63,11 +87,99 @@ const ResumeEditor = () => {
     }));
   };
 
+  // ✅ Handle removing the last work experience entry
+  const removeLastWorkExperience = () => {
+    if (resume.workExperiences.length > 0) {
+      const updatedExperiences = [...resume.workExperiences];
+      updatedExperiences.pop(); // Remove the last item
+      setResume((prev) => ({ ...prev, workExperiences: updatedExperiences }));
+      saveResume(); // Save changes immediately
+    }
+  };
+
   // ✅ Handle updating a specific work experience entry
   const updateWorkExperience = (index, field, value) => {
     const updatedExperiences = [...resume.workExperiences];
     updatedExperiences[index][field] = value;
     setResume((prev) => ({ ...prev, workExperiences: updatedExperiences }));
+  };
+
+  // ✅ Filter skills based on input
+  const handleSkillInputChange = (e) => {
+    const value = e.target.value;
+    setSkillInput(value);
+    
+    if (value.trim() === "") {
+      setFilteredSkills([]);
+      setShowSkillsDropdown(false);
+    } else {
+      const filtered = predefinedSkills.filter(skill => 
+        skill.toLowerCase().includes(value.toLowerCase()) && 
+        !resume.skills.includes(skill)
+      );
+      setFilteredSkills(filtered);
+      setShowSkillsDropdown(true);
+    }
+  };
+
+  // ✅ Filter languages based on input
+  const handleLanguageInputChange = (e) => {
+    const value = e.target.value;
+    setLanguageInput(value);
+    
+    if (value.trim() === "") {
+      setFilteredLanguages([]);
+      setShowLanguagesDropdown(false);
+    } else {
+      const filtered = predefinedLanguages.filter(language => 
+        language.toLowerCase().includes(value.toLowerCase()) && 
+        !resume.languages.includes(language)
+      );
+      setFilteredLanguages(filtered);
+      setShowLanguagesDropdown(true);
+    }
+  };
+
+  // ✅ Add a skill from dropdown or custom input
+  const addSkill = (skill = null) => {
+    const skillToAdd = skill || skillInput.trim();
+    
+    if (skillToAdd && !resume.skills.includes(skillToAdd)) {
+      const updatedSkills = [...resume.skills, skillToAdd];
+      setResume((prev) => ({ ...prev, skills: updatedSkills }));
+      setSkillInput("");
+      setFilteredSkills([]);
+      setShowSkillsDropdown(false);
+      saveResume();
+    }
+  };
+
+  // ✅ Add a language from dropdown or custom input
+  const addLanguage = (language = null) => {
+    const languageToAdd = language || languageInput.trim();
+    
+    if (languageToAdd && !resume.languages.includes(languageToAdd)) {
+      const updatedLanguages = [...resume.languages, languageToAdd];
+      setResume((prev) => ({ ...prev, languages: updatedLanguages }));
+      setLanguageInput("");
+      setFilteredLanguages([]);
+      setShowLanguagesDropdown(false);
+      saveResume();
+    }
+  };
+
+  // ✅ Remove a skill
+  const removeSkill = (skillToRemove) => {
+    const updatedSkills = resume.skills.filter(skill => skill !== skillToRemove);
+    setResume((prev) => ({ ...prev, skills: updatedSkills }));
+    saveResume();
+  };
+
+  // ✅ Remove a language
+  const removeLanguage = (languageToRemove) => {
+    const updatedLanguages = resume.languages.filter(language => language !== languageToRemove);
+    setResume((prev) => ({ ...prev, languages: updatedLanguages }));
+    saveResume();
   };
 
   // ✅ New function to show delete confirmation popup
@@ -116,6 +228,64 @@ const ResumeEditor = () => {
       <label>Phone Number:</label>
       <input type="text" name="phone" value={resume.phone} onChange={handleChange} onBlur={saveResume} />
 
+      <label>Professional Summary:</label>
+      <textarea 
+        name="professionalSummary" 
+        value={resume.professionalSummary} 
+        onChange={handleChange} 
+        onBlur={saveResume}
+        placeholder="Write a professional summary..."
+        rows={4}
+      />
+
+      <label>Education:</label>
+      <textarea 
+        name="education" 
+        value={resume.education} 
+        onChange={handleChange} 
+        onBlur={saveResume}
+        placeholder="List your education..."
+        rows={3}
+      />
+
+      <label>Skills:</label>
+      <div className="dropdown-container">
+        <div className="input-with-button">
+          <input 
+            type="text" 
+            value={skillInput} 
+            onChange={handleSkillInputChange}
+            placeholder="Search or add skills..."
+            onFocus={() => skillInput.trim() !== "" && setShowSkillsDropdown(true)}
+            onBlur={() => setTimeout(() => setShowSkillsDropdown(false), 200)}
+          />
+          <button type="button" onClick={() => addSkill()}>Add</button>
+        </div>
+        
+        {showSkillsDropdown && filteredSkills.length > 0 && (
+          <div className="dropdown-list">
+            {filteredSkills.map((skill, index) => (
+              <div 
+                key={index} 
+                className="dropdown-item"
+                onClick={() => addSkill(skill)}
+              >
+                {skill}
+              </div>
+            ))}
+          </div>
+        )}
+        
+        <div className="tags-container">
+          {resume.skills.map((skill, index) => (
+            <div key={index} className="tag">
+              {skill}
+              <span className="tag-remove" onClick={() => removeSkill(skill)}>×</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <h2>Work Experience</h2>
       {resume.workExperiences.map((experience, index) => (
         <div key={index} className="work-experience">
@@ -139,7 +309,52 @@ const ResumeEditor = () => {
           />
         </div>
       ))}
-      <button onClick={addWorkExperience}>+ Add Work Experience</button>
+      <div className="button-group">
+        <button onClick={addWorkExperience}>+ Add Work Experience</button>
+        {resume.workExperiences.length > 0 && (
+          <button onClick={removeLastWorkExperience} className="delete-work-btn">
+            - Remove Last Work Experience
+          </button>
+        )}
+      </div>
+      
+      <label>Languages:</label>
+      <div className="dropdown-container">
+        <div className="input-with-button">
+          <input 
+            type="text" 
+            value={languageInput} 
+            onChange={handleLanguageInputChange}
+            placeholder="Search or add languages..."
+            onFocus={() => languageInput.trim() !== "" && setShowLanguagesDropdown(true)}
+            onBlur={() => setTimeout(() => setShowLanguagesDropdown(false), 200)}
+          />
+          <button type="button" onClick={() => addLanguage()}>Add</button>
+        </div>
+        
+        {showLanguagesDropdown && filteredLanguages.length > 0 && (
+          <div className="dropdown-list">
+            {filteredLanguages.map((language, index) => (
+              <div 
+                key={index} 
+                className="dropdown-item"
+                onClick={() => addLanguage(language)}
+              >
+                {language}
+              </div>
+            ))}
+          </div>
+        )}
+        
+        <div className="tags-container">
+          {resume.languages.map((language, index) => (
+            <div key={index} className="tag">
+              {language}
+              <span className="tag-remove" onClick={() => removeLanguage(language)}>×</span>
+            </div>
+          ))}
+        </div>
+      </div>
       
       {/* Delete Resume Button */}
       <button className="delete-btn" onClick={showDeleteConfirmation}>
