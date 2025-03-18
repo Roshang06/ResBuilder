@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useParams, useNavigate } from "react-router-dom";
+import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import "../styles/ResumeEditor.css";
 
 const ResumeEditor = () => {
   const { id } = useParams(); // Get the resume ID from the URL
+  const navigate = useNavigate(); // Add navigate for redirection
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // State for delete confirmation popup
 
   // ✅ Ensure `workExperiences` is always an array
   const [resume, setResume] = useState({
@@ -68,8 +70,35 @@ const ResumeEditor = () => {
     setResume((prev) => ({ ...prev, workExperiences: updatedExperiences }));
   };
 
+  // ✅ New function to show delete confirmation popup
+  const showDeleteConfirmation = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  // ✅ New function to handle resume deletion
+  const deleteResume = async () => {
+    try {
+      await deleteDoc(doc(db, "projects", id));
+      navigate("/dashboard"); // Redirect to dashboard after deletion
+    } catch (error) {
+      console.error("Error deleting resume:", error);
+      // Could add error state handling here if needed
+    }
+  };
+
+  // ✅ New function to handle back button click - save and navigate
+  const handleBackClick = async () => {
+    await saveResume(); // Save all changes
+    navigate("/dashboard"); // Go back to dashboard
+  };
+
   return (
     <div className="resume-editor-container">
+      {/* Back button */}
+      <button className="back-button" onClick={handleBackClick}>
+        <span className="back-arrow">&#8592;</span> Back
+      </button>
+      
       <h1>Edit Resume</h1>
 
       <label>Project Name:</label>
@@ -111,9 +140,31 @@ const ResumeEditor = () => {
         </div>
       ))}
       <button onClick={addWorkExperience}>+ Add Work Experience</button>
+      
+      {/* Delete Resume Button */}
+      <button className="delete-btn" onClick={showDeleteConfirmation}>
+        Delete Resume
+      </button>
+
+      {/* Delete Confirmation Popup */}
+      {showDeleteConfirm && (
+        <div className="delete-confirm-overlay">
+          <div className="delete-confirm-popup">
+            <h3>Delete Resume?</h3>
+            <p>Are you sure you want to delete this resume? This action cannot be undone.</p>
+            <div className="delete-confirm-buttons">
+              <button onClick={deleteResume} className="delete-confirm-yes">
+                Yes, Delete
+              </button>
+              <button onClick={() => setShowDeleteConfirm(false)} className="delete-confirm-no">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ResumeEditor;
-
