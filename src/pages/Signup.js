@@ -18,7 +18,19 @@ const Signup = () => {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate("/dashboard"); // Redirect after signup
     } catch (err) {
-      setError("Failed to create account");
+      console.error("Signup Error:", err.message); // Logs the full error for debugging
+
+        // Extracting user-friendly error messages
+        if (err.code === "auth/weak-password") {
+          setError("Password must be at least 6 characters.");
+        } else if (err.code === "auth/email-already-in-use") {
+          setError("This email is already registered. Try logging in.");
+        } else if (err.code === "auth/invalid-email") {
+          setError("Please enter a valid email address.");
+        } else {
+          setError("An unexpected error occurred. Please try again.");
+        }
+        
     }
   };
 
