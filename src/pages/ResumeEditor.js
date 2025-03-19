@@ -29,7 +29,7 @@ const ResumeEditor = () => {
   const [showSkillsDropdown, setShowSkillsDropdown] = useState(false);
   const [showLanguagesDropdown, setShowLanguagesDropdown] = useState(false);
 
-  // ✅ Ensure proper data structure for the state
+  // Ensure proper data structure for the state
   const [resume, setResume] = useState({
     projectName: "",
     jobPosition: "",
@@ -46,7 +46,7 @@ const ResumeEditor = () => {
     languages: [], // Array for multiple languages
   });
 
-  // ✅ Fetch resume details from Firestore
+  // Fetch resume details from Firestore
   useEffect(() => {
     const fetchResume = async () => {
       const docRef = doc(db, "projects", id);
@@ -68,18 +68,18 @@ const ResumeEditor = () => {
     fetchResume();
   }, [id]);
 
-  // ✅ Save changes to Firestore
+  // Save changes to Firestore
   const saveResume = async () => {
     await setDoc(doc(db, "projects", id), resume);
   };
 
-  // ✅ Handle input changes
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setResume((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Handle adding a new work experience entry
+  // Handle adding a new work experience entry
   const addWorkExperience = () => {
     setResume((prev) => ({
       ...prev,
@@ -87,7 +87,7 @@ const ResumeEditor = () => {
     }));
   };
 
-  // ✅ Handle removing the last work experience entry
+  // Handle removing the last work experience entry
   const removeLastWorkExperience = () => {
     if (resume.workExperiences.length > 0) {
       const updatedExperiences = [...resume.workExperiences];
@@ -97,14 +97,14 @@ const ResumeEditor = () => {
     }
   };
 
-  // ✅ Handle updating a specific work experience entry
+  // Handle updating a specific work experience entry
   const updateWorkExperience = (index, field, value) => {
     const updatedExperiences = [...resume.workExperiences];
     updatedExperiences[index][field] = value;
     setResume((prev) => ({ ...prev, workExperiences: updatedExperiences }));
   };
 
-  // ✅ Filter skills based on input
+  // Filter skills based on input
   const handleSkillInputChange = (e) => {
     const value = e.target.value;
     setSkillInput(value);
@@ -122,7 +122,7 @@ const ResumeEditor = () => {
     }
   };
 
-  // ✅ Filter languages based on input
+  // Filter languages based on input
   const handleLanguageInputChange = (e) => {
     const value = e.target.value;
     setLanguageInput(value);
@@ -140,7 +140,7 @@ const ResumeEditor = () => {
     }
   };
 
-  // ✅ Add a skill from dropdown or custom input
+  // Add a skill from dropdown or custom input
   const addSkill = (skill = null) => {
     const skillToAdd = skill || skillInput.trim();
     
@@ -154,7 +154,7 @@ const ResumeEditor = () => {
     }
   };
 
-  // ✅ Add a language from dropdown or custom input
+  // Add a language from dropdown or custom input
   const addLanguage = (language = null) => {
     const languageToAdd = language || languageInput.trim();
     
@@ -168,26 +168,26 @@ const ResumeEditor = () => {
     }
   };
 
-  // ✅ Remove a skill
+  // Remove a skill
   const removeSkill = (skillToRemove) => {
     const updatedSkills = resume.skills.filter(skill => skill !== skillToRemove);
     setResume((prev) => ({ ...prev, skills: updatedSkills }));
     saveResume();
   };
 
-  // ✅ Remove a language
+  // Remove a language
   const removeLanguage = (languageToRemove) => {
     const updatedLanguages = resume.languages.filter(language => language !== languageToRemove);
     setResume((prev) => ({ ...prev, languages: updatedLanguages }));
     saveResume();
   };
 
-  // ✅ New function to show delete confirmation popup
+  // New function to show delete confirmation popup
   const showDeleteConfirmation = () => {
     setShowDeleteConfirm(true);
   };
 
-  // ✅ New function to handle resume deletion
+  // New function to handle resume deletion
   const deleteResume = async () => {
     try {
       await deleteDoc(doc(db, "projects", id));
@@ -198,7 +198,7 @@ const ResumeEditor = () => {
     }
   };
 
-  // ✅ New function to handle back button click - save and navigate
+  // New function to handle back button click - save and navigate
   const handleBackClick = async () => {
     await saveResume(); // Save all changes
     navigate("/dashboard"); // Go back to dashboard

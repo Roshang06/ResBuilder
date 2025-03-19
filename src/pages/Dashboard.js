@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../config/firebase"; // ✅ Import Firestore
+import { auth, db } from "../config/firebase"; 
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore"; // ✅ Firestore functions
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore"; 
 import { useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
 
@@ -10,7 +10,6 @@ function Dashboard() {
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
 
-  // ✅ Listen for authentication state changes and fetch projects
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -25,7 +24,7 @@ function Dashboard() {
     return () => unsubscribe();
   }, [navigate]);
 
-  // ✅ Fetch resume projects from Firestore
+
   const fetchProjects = async (userId) => {
     try {
       const q = query(collection(db, "projects"), where("userId", "==", userId));
@@ -40,7 +39,7 @@ function Dashboard() {
     }
   };
 
-  // ✅ Add new resume project to Firestore with default title
+
   const addNewProject = async () => {
     if (!user) return;
 
@@ -61,12 +60,12 @@ function Dashboard() {
     }
   };
 
-  // ✅ Navigate to resume editor
+  // Navigate to resume editor
   const openResumeEditor = (id) => {
     navigate(`/resume/${id}`);
   };
 
-  // ✅ Logout and clear state
+  // Logout and clear state
   const handleLogout = async () => {
     await signOut(auth);
     setProjects([]);
