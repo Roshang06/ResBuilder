@@ -1,18 +1,48 @@
+/* Resume Editor with enhanced visual styling */
 .resume-editor-container {
-  max-width: 800px;
+  max-width: 850px;
   margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
   text-align: left;
   position: relative;
+  transition: all 0.3s ease;
+}
+
+.resume-editor-container:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
 .resume-editor-container h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 10px 0 35px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d3748;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.resume-editor-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 2px;
+}
+
+.resume-editor-container h2 {
+  font-size: 22px;
+  color: #4a5568;
+  margin: 30px 0 15px;
+  padding-left: 12px;
+  border-left: 4px solid #6366f1;
 }
 
 /* Back Button Styling */
@@ -20,124 +50,152 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  background-color: #f8f9fa;
-  color: #333;
-  border: 1px solid #ddd;
-  padding: 8px 15px;
-  border-radius: 5px;
+  background-color: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
 }
 
 .back-button:hover {
-  background-color: #e9ecef;
+  background-color: #edf2f7;
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #2d3748;
 }
 
 .back-arrow {
   font-size: 18px;
-  margin-right: 5px;
+  margin-right: 8px;
   font-weight: bold;
 }
 
+/* Form Elements */
 label {
   display: block;
-  font-weight: bold;
-  margin-top: 15px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: #4a5568;
+  font-size: 15px;
 }
 
 input, textarea {
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  padding: 12px 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
+}
+
+input:focus, textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  outline: none;
 }
 
 textarea {
-  height: 100px;
+  min-height: 120px;
   resize: vertical;
-  font-family: Arial, sans-serif;
+  font-family: inherit;
+  line-height: 1.5;
 }
 
+/* Work Experience Sections */
 .work-experience {
-  background: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.work-experience:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .work-experience input {
   display: block;
-  width: 95%;
-  margin-bottom: 5px;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
+/* Button Styling */
 button {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
-  padding: 10px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  display: block;
-  margin: 10px 0;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
 }
 
 button:hover {
-  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4);
 }
 
 /* Button Group for Work Experience */
 .button-group {
   display: flex;
-  gap: 10px;
-  margin: 10px 0 20px 0;
+  gap: 15px;
+  margin: 20px 0 30px 0;
 }
 
 .button-group button {
   margin: 0;
+  flex: 1;
 }
 
 /* Delete Work Experience Button */
 .delete-work-btn {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background: linear-gradient(135deg, #fc8181, #f56565);
+  box-shadow: 0 4px 10px rgba(245, 101, 101, 0.3);
 }
 
 .delete-work-btn:hover {
-  background-color: #f1b0b7;
+  background: linear-gradient(135deg, #f56565, #e53e3e);
+  box-shadow: 0 6px 15px rgba(245, 101, 101, 0.4);
 }
 
 /* Delete Button Styling */
 .delete-btn {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #fc8181, #f56565);
   color: white;
-  margin-top: 20px;
+  margin-top: 40px;
+  box-shadow: 0 4px 10px rgba(245, 101, 101, 0.3);
 }
 
 .delete-btn:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, #f56565, #e53e3e);
+  box-shadow: 0 6px 15px rgba(245, 101, 101, 0.4);
 }
 
 /* Dropdown Container and Components */
 .dropdown-container {
   position: relative;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .input-with-button {
   display: flex;
-  gap: 5px;
-  margin-bottom: 5px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .input-with-button input {
@@ -145,8 +203,9 @@ button:hover {
 }
 
 .input-with-button button {
-  margin: 5px 0 0 0;
-  padding: 8px 15px;
+  margin: 0;
+  padding: 12px 20px;
+  white-space: nowrap;
 }
 
 .dropdown-list {
@@ -154,51 +213,70 @@ button:hover {
   top: 100%;
   left: 0;
   width: 100%;
-  max-height: 200px;
+  max-height: 220px;
   overflow-y: auto;
   background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-item {
-  padding: 8px 12px;
+  padding: 10px 15px;
   cursor: pointer;
+  border-bottom: 1px solid #f7fafc;
+  transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background-color: #f0f0f0;
+  background-color: #f7fafc;
+  color: #4f46e5;
 }
 
 /* Tags Container and Styling */
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .tag {
-  background-color: #e1f5fe;
-  color: #0277bd;
-  padding: 5px 10px;
-  border-radius: 20px;
+  background-color: #ebf4ff;
+  color: #4f46e5;
+  padding: 8px 16px;
+  border-radius: 30px;
   font-size: 14px;
   display: flex;
   align-items: center;
   cursor: default;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(66, 153, 225, 0.1);
+}
+
+.tag:hover {
+  background-color: #e0f2fe;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(66, 153, 225, 0.15);
 }
 
 .tag-remove {
-  margin-left: 5px;
+  margin-left: 8px;
   font-size: 18px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
 }
 
 .tag-remove:hover {
-  color: #01579b;
+  background-color: rgba(79, 70, 229, 0.1);
+  color: #3730a3;
 }
 
 /* Delete Confirmation Popup Overlay */
@@ -208,48 +286,111 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 /* Delete Confirmation Popup */
 .delete-confirm-popup {
   background-color: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 30px;
+  border-radius: 16px;
   width: 90%;
-  max-width: 400px;
+  max-width: 450px;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  animation: scaleIn 0.3s ease-out forwards;
 }
 
 .delete-confirm-popup h3 {
-  color: #dc3545;
+  color: #e53e3e;
   margin-top: 0;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.delete-confirm-popup p {
+  color: #4a5568;
+  margin-bottom: 25px;
+  line-height: 1.6;
 }
 
 .delete-confirm-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
   margin-top: 20px;
 }
 
 .delete-confirm-yes {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #fc8181, #f56565);
+  padding: 12px 25px;
 }
 
 .delete-confirm-yes:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, #f56565, #e53e3e);
 }
 
 .delete-confirm-no {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #a0aec0, #718096);
+  padding: 12px 25px;
 }
 
 .delete-confirm-no:hover {
-  background-color: #5a6268;
+  background: linear-gradient(135deg, #718096, #4a5568);
 }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .resume-editor-container {
+    padding: 30px 20px;
+    margin: 30px 15px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .delete-confirm-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Form Section Transition */
+.resume-editor-container > input,
+.resume-editor-container > textarea,
+.resume-editor-container > .dropdown-container,
+.work-experience {
+  animation: slideIn 0.5s ease-out forwards;
+  animation-delay: calc(var(--form-delay, 0) * 0.08s);
+}
+
+@keyframes slideIn {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Sequential animation for form elements */
+.resume-editor-container > *:nth-child(3) { --form-delay: 1; }
+.resume-editor-container > *:nth-child(4) { --form-delay: 2; }
+.resume-editor-container > *:nth-child(5) { --form-delay: 3; }
+.resume-editor-container > *:nth-child(6) { --form-delay: 4; }
+.resume-editor-container > *:nth-child(7) { --form-delay: 5; }
+.resume-editor-container > *:nth-child(8) { --form-delay: 6; }
+.resume-editor-container > *:nth-child(9) { --form-delay: 7; }
+.resume-editor-container > *:nth-child(10) { --form-delay: 8; }
