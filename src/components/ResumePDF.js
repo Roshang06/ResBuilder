@@ -8,79 +8,102 @@ import {
   Font,
 } from "@react-pdf/renderer";
 
-// Register all font variants
+// Register built-in PDF fonts as fallbacks
+Font.registerHyphenationCallback(word => [word]);
+
+// Register locally bundled fonts
 Font.register({
-    family: 'Arial',
-    fonts: [
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 700 }, // Bold
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOkCnqEu92Fr1Mu51xIIzg.ttf', fontStyle: 'italic' }, // Italic
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOjCnqEu92Fr1Mu51TzBic6CsE.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
-    ]
-  });
+  family: 'Arial',
+  fonts: [
+    { src: '/fonts/arial/arial.ttf' }, // Regular
+    { src: '/fonts/arial/arial-bold.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/arial/arial-italic.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/arial/arial-bold-italic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+  ]
+});
+
+Font.register({
+  family: 'Georgia',
+  fonts: [
+    { src: '/fonts/georgia/georgia.ttf' }, // Regular
+    { src: '/fonts/georgia/georgia-bold.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/georgia/georgia-italic.ttf', fontStyle: 'italic' }, // Italic
+  ]
+});
+
+Font.register({
+  family: 'Times New Roman',
+  fonts: [
+    { src: '/fonts/times/times.ttf' }, // Regular
+    { src: '/fonts/times/times-bold.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/times/times-italic.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/times/times-bold-italic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+  ]
+});
+
+Font.register({
+  family: 'Helvetica',
+  fonts: [
+    { src: '/fonts/helvetica/helvetica.ttf' }, // Regular
+    { src: '/fonts/helvetica/helvetica-bold.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/helvetica/helvetica-oblique.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/helvetica/helvetica-bold-oblique.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+  ]
+});
+
+Font.register({
+  family: 'Roboto',
+  fonts: [
+    { src: '/fonts/roboto/Roboto-Regular.ttf' }, // Regular
+    { src: '/fonts/roboto/Roboto-Bold.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/roboto/Roboto-Italic.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/roboto/Roboto-BoldItalic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+  ]
+});
+
+Font.register({
+  family: 'Montserrat',
+  fonts: [
+    { src: '/fonts/montserrat/Montserrat-Regular.ttf' }, // Regular
+    { src: '/fonts/montserrat/Montserrat-Bold.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/montserrat/Montserrat-Italic.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/montserrat/Montserrat-BoldItalic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+  ]
+});
+
+// Register fallback font that will always work
+Font.register({
+  family: 'Fallback',
+  src: '/fonts/roboto/Roboto-Regular.ttf'
+});
+
+// Helper function to get a safely available font
+const getSafeFont = (requestedFont) => {
+  // Extract the primary font family name
+  const primaryFont = requestedFont.split(",")[0].trim();
   
-  // Georgia
-  Font.register({
-    family: 'Georgia',
-    fonts: [
-      { src: 'https://fonts.gstatic.com/s/librebaskerville/v9/kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxM.ttf' }, // Regular
-      { src: 'https://fonts.gstatic.com/s/librebaskerville/v9/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcU.ttf', fontWeight: 700 }, // Bold
-      { src: 'https://fonts.gstatic.com/s/librebaskerville/v9/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWx8QCQ.ttf', fontStyle: 'italic' }, // Italic
-    ]
-  });
+  // Check if it's one of our registered fonts
+  const availableFonts = ['Arial', 'Georgia', 'Times New Roman', 'Helvetica', 'Roboto', 'Montserrat'];
   
-  // Times New Roman (using a similar serif font)
-  Font.register({
-    family: 'Times New Roman',
-    fonts: [
-      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRVQgYoZZY2vCFuvAFWzro.ttf' }, // Regular
-      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRSQgYoZZY2vCFuvAnt66qSVy8.ttf', fontWeight: 700 }, // Bold
-      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRTQgYoZZY2vCFuvAFT_rm1cgT9rQ.ttf', fontStyle: 'italic' }, // Italic
-      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRQQgYoZZY2vCFuvAFT9gaQZynfpFA.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
-    ]
-  });
+  if (availableFonts.includes(primaryFont)) {
+    return primaryFont;
+  }
   
-  // Helvetica (using a similar sans-serif font)
-  Font.register({
-    family: 'Helvetica',
-    fonts: [
-      { src: 'https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0e.ttf' }, // Regular
-      { src: 'https://fonts.gstatic.com/s/opensans/v18/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf', fontWeight: 700 }, // Bold
-      { src: 'https://fonts.gstatic.com/s/opensans/v18/mem6YaGs126MiZpBA-UFUK0Zdcg.ttf', fontStyle: 'italic' }, // Italic
-      { src: 'https://fonts.gstatic.com/s/opensans/v18/memnYaGs126MiZpBA-UFUKWiUNhrIqY.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
-    ]
-  });
-  
-  // Roboto
-  Font.register({
-    family: 'Roboto',
-    fonts: [
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 700 }, // Bold
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOkCnqEu92Fr1Mu51xIIzg.ttf', fontStyle: 'italic' }, // Italic
-      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOjCnqEu92Fr1Mu51TzBic6CsE.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
-    ]
-  });
-  
-  // Montserrat
-  Font.register({
-    family: 'Montserrat',
-    fonts: [
-      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf' }, // Regular
-      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTURjIg1_i6t8kCHKm45_dJE3gnD-w.ttf', fontWeight: 700 }, // Bold
-      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUPjIg1_i6t8kCHKm459WxZcgvz8fZwnCo.ttf', fontStyle: 'italic' }, // Italic
-      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUPjIg1_i6t8kCHKm459WxZcgvz_PZ1.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
-    ]
-  });
+  // Return fallback if requested font isn't available
+  return 'Fallback';
+};
 
 // Create a component for the PDF output
 export const ResumePDF = ({ resume, format, customization }) => {
+  // Get safe font
+  const safeFont = getSafeFont(customization.fontFamily);
+  
   // Create styles based on the selected format and customization
   const styles = StyleSheet.create({
     page: {
       flexDirection: "column",
       padding: 0,
-      fontFamily: customization.fontFamily.split(",")[0].trim(),
+      fontFamily: safeFont,
       fontSize: 
         customization.fontSize === "small" ? 10 : 
         customization.fontSize === "large" ? 12 : 11,
@@ -89,7 +112,7 @@ export const ResumePDF = ({ resume, format, customization }) => {
         customization.spacing === "spacious" ? 1.8 : 1.5,
     },
     header: {
-      backgroundColor: customization.primaryColor,
+      backgroundColor: customization.primaryColor || "#1a73e8",
       padding: 30,
       color: "white",
     },
@@ -100,10 +123,12 @@ export const ResumePDF = ({ resume, format, customization }) => {
       fontSize: 24,
       fontWeight: "bold",
       marginBottom: 5,
+      fontFamily: safeFont,
     },
     jobPosition: {
       fontSize: 16,
       marginBottom: 15,
+      fontFamily: safeFont,
     },
     contactInfo: {
       fontSize: 11,
@@ -111,6 +136,7 @@ export const ResumePDF = ({ resume, format, customization }) => {
       flexWrap: "wrap",
       justifyContent: "space-between",
       maxWidth: 400,
+      fontFamily: safeFont,
     },
     contactItem: {
       marginRight: 15,
@@ -127,14 +153,16 @@ export const ResumePDF = ({ resume, format, customization }) => {
       fontSize: 14,
       fontWeight: "bold",
       marginBottom: 8,
-      color: customization.primaryColor,
+      color: customization.primaryColor || "#1a73e8",
       borderBottomWidth: 1,
-      borderBottomColor: customization.primaryColor,
+      borderBottomColor: customization.primaryColor || "#1a73e8",
       paddingBottom: 2,
+      fontFamily: safeFont,
     },
     sectionContent: {
       fontSize: 11,
       marginBottom: 10,
+      fontFamily: safeFont,
     },
     experienceItem: {
       marginBottom: 10,
@@ -146,13 +174,15 @@ export const ResumePDF = ({ resume, format, customization }) => {
     },
     companyName: {
       fontWeight: "bold",
+      fontFamily: safeFont,
     },
     duration: {
       fontSize: 10,
       fontStyle: "italic",
+      fontFamily: safeFont,
     },
     role: {
-      fontFamily: customization.fontFamily.split(",")[0].trim(),
+      fontFamily: safeFont,
       fontStyle: "italic",
       marginBottom: 4,
     },
@@ -161,22 +191,24 @@ export const ResumePDF = ({ resume, format, customization }) => {
       flexWrap: "wrap",
     },
     skillTag: {
-      backgroundColor: customization.secondaryColor,
-      color: customization.primaryColor,
+      backgroundColor: customization.secondaryColor || "#f1f3f4",
+      color: customization.primaryColor || "#1a73e8",
       padding: 4,
       marginRight: 5,
       marginBottom: 5,
       borderRadius: 3,
       fontSize: 10,
+      fontFamily: safeFont,
     },
     languageTag: {
-      backgroundColor: customization.secondaryColor,
-      color: customization.primaryColor,
+      backgroundColor: customization.secondaryColor || "#f1f3f4",
+      color: customization.primaryColor || "#1a73e8",
       padding: 4,
       marginRight: 5,
       marginBottom: 5,
       borderRadius: 3,
       fontSize: 10,
+      fontFamily: safeFont,
     },
   });
 

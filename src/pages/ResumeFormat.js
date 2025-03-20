@@ -6,7 +6,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { pdf } from '@react-pdf/renderer';
 import "../styles/ResumeFormat.css";
 
-// Import the PDF rendering components (you'll need to create these)
+// Import the PDF rendering components
 import { ResumePDF } from "../components/ResumePDF";
 
 const ResumeFormat = () => {
@@ -16,6 +16,7 @@ const ResumeFormat = () => {
   const [resume, setResume] = useState(null);
   const [selectedFormat, setSelectedFormat] = useState(null);
   const [pdfError, setPdfError] = useState(null);
+  const [pdfStatus, setPdfStatus] = useState('idle'); // idle, generating, success, error
   const [customization, setCustomization] = useState({
     primaryColor: "#1a73e8",
     secondaryColor: "#f1f3f4",
@@ -105,6 +106,9 @@ const ResumeFormat = () => {
       secondaryColor: format.secondaryColor,
       fontFamily: format.fontFamily,
     });
+    // Clear any previous PDF errors
+    setPdfError(null);
+    setPdfStatus('idle');
   };
 
   // Handle customization changes
@@ -113,6 +117,8 @@ const ResumeFormat = () => {
       ...prev,
       [property]: value,
     }));
+    // Reset PDF status when customization changes
+    setPdfStatus('idle');
   };
 
   // Handle back button click
@@ -125,8 +131,11 @@ const ResumeFormat = () => {
   }
 
   const handleDirectDownload = async () => {
+    setPdfStatus('generating');
+    setPdfError(null);
+    
     try {
-      setPdfError(null); // Clear any previous errors
+      // First attempt with selected fonts
       const blob = await pdf(
         <ResumePDF
           resume={resume}
@@ -142,17 +151,20 @@ const ResumeFormat = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url); // Clean up
+      URL.revokeObjectURL(url);
+      
+      setPdfStatus('success');
     } catch (error) {
       console.error("Error generating PDF:", error);
-      setPdfError(error.message);
+      setPdfError("Attempting with fallback fonts...");
+      setPdfStatus('error');
       
-      // Try fallback to a default font
+      // Try with fallback fonts
       try {
-        // Set a fallback font
+        // Use a reliable fallback font configuration
         const fallbackCustomization = {
           ...customization,
-          fontFamily: "Arial, sans-serif"
+          fontFamily: "Roboto, sans-serif" // Using our locally bundled Roboto
         };
         
         const blob = await pdf(
@@ -166,15 +178,18 @@ const ResumeFormat = () => {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `${resume.applicantName}_Resume.pdf`;
+        link.download = `${resume.applicantName}_Resume_Fallback.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
         
-        setPdfError("Used fallback font due to font loading issues.");
+        setPdfStatus('success');
+        setPdfError("Used fallback font due to font loading issues, but PDF generated successfully.");
       } catch (fallbackError) {
-        setPdfError("PDF generation failed completely. Please try a different browser.");
+        console.error("Fallback PDF generation failed:", fallbackError);
+        setPdfError("PDF generation failed. Please try a different browser or font.");
+        setPdfStatus('error');
       }
     }
   };
@@ -277,8 +292,14 @@ const ResumeFormat = () => {
             </div>
 
             {pdfError && (
-                <div className="error-message">
-                    Error generating PDF: {pdfError}. Try a different format or refresh the page.
+                <div className="status-message error-message">
+                    {pdfError}
+                </div>
+            )}
+            
+            {pdfStatus === 'success' && !pdfError && (
+                <div className="status-message success-message">
+                    PDF generated successfully!
                 </div>
             )}
             
@@ -295,26 +316,32 @@ const ResumeFormat = () => {
                 fileName={`${resume.applicantName}_${resume.jobPosition}_Resume.pdf`}
                 className="download-btn"
                 style={{
-                    textDecoration: "none",
-                    display: "inline-block",
-                    padding: "10px 20px",
-                    backgroundColor: "#1a73e8",
-                    color: "white",
-                    borderRadius: "4px",
-                  }}
+                  textDecoration: "none",
+                  display: "inline-block",
+                  padding: "10px 20px",
+                  backgroundColor: "#1a73e8",
+                  color: "white",
+                  borderRadius: "4px",
+                }}
               >
                 {({ blob, url, loading, error }) => {
-                    if (error) {
-                        setPdfError(error.message);
-                        return "Error generating PDF";
-                    }
-                    return loading ? "Generating PDF..." : "Download PDF";
+                  if (loading) {
+                    return "Generating PDF...";
+                  }
+                  if (error) {
+                    return "Download PDF (React-PDF)";
+                  }
+                  return "Download PDF";
                 }}
               </PDFDownloadLink>
               
-                <button onClick={handleDirectDownload} className="download-btn-fallback">
-                    Alternative Download
-                </button>
+              <button 
+                onClick={handleDirectDownload} 
+                className="download-btn-fallback"
+                disabled={pdfStatus === 'generating'}
+              >
+                {pdfStatus === 'generating' ? 'Generating PDF...' : 'Alternative Download'}
+              </button>
 
               <button className="format-select-btn" onClick={() => setSelectedFormat(null)}>
                 Choose Another Format
@@ -356,14 +383,16 @@ const ResumeFormat = () => {
                 </div>
                 
                 {/* Body - this is where formats would differ more significantly */}
-                <div 
-                  className="resume-body"
-                  style={{ backgroundColor: customization.secondaryColor }}
-                >
+                <div className="resume-body">
                   {/* Professional Summary */}
                   {resume.professionalSummary && (
                     <div className="resume-section">
-                      <h3 className="section-title">Professional Summary</h3>
+                      <h3 
+                        className="section-title"
+                        style={{ color: customization.primaryColor, borderBottomColor: customization.primaryColor }}
+                      >
+                        Professional Summary
+                      </h3>
                       <div className="section-content">{resume.professionalSummary}</div>
                     </div>
                   )}
@@ -371,7 +400,12 @@ const ResumeFormat = () => {
                   {/* Work Experience */}
                   {resume.workExperiences && resume.workExperiences.length > 0 && (
                     <div className="resume-section">
-                      <h3 className="section-title">Work Experience</h3>
+                      <h3 
+                        className="section-title"
+                        style={{ color: customization.primaryColor, borderBottomColor: customization.primaryColor }}
+                      >
+                        Work Experience
+                      </h3>
                       <div className="section-content">
                         {resume.workExperiences.map((experience, index) => (
                           <div key={index} className="experience-item">
@@ -389,7 +423,12 @@ const ResumeFormat = () => {
                   {/* Education */}
                   {resume.education && (
                     <div className="resume-section">
-                      <h3 className="section-title">Education</h3>
+                      <h3 
+                        className="section-title"
+                        style={{ color: customization.primaryColor, borderBottomColor: customization.primaryColor }}
+                      >
+                        Education
+                      </h3>
                       <div className="section-content">{resume.education}</div>
                     </div>
                   )}
@@ -397,10 +436,24 @@ const ResumeFormat = () => {
                   {/* Skills */}
                   {resume.skills && resume.skills.length > 0 && (
                     <div className="resume-section">
-                      <h3 className="section-title">Skills</h3>
+                      <h3 
+                        className="section-title"
+                        style={{ color: customization.primaryColor, borderBottomColor: customization.primaryColor }}
+                      >
+                        Skills
+                      </h3>
                       <div className="skills-container">
                         {resume.skills.map((skill, index) => (
-                          <span key={index} className="skill-tag">{skill}</span>
+                          <span 
+                            key={index} 
+                            className="skill-tag"
+                            style={{ 
+                              backgroundColor: customization.secondaryColor,
+                              color: customization.primaryColor
+                            }}
+                          >
+                            {skill}
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -409,10 +462,24 @@ const ResumeFormat = () => {
                   {/* Languages */}
                   {resume.languages && resume.languages.length > 0 && (
                     <div className="resume-section">
-                      <h3 className="section-title">Languages</h3>
+                      <h3 
+                        className="section-title"
+                        style={{ color: customization.primaryColor, borderBottomColor: customization.primaryColor }}
+                      >
+                        Languages
+                      </h3>
                       <div className="languages-container">
                         {resume.languages.map((language, index) => (
-                          <span key={index} className="language-tag">{language}</span>
+                          <span 
+                            key={index} 
+                            className="language-tag"
+                            style={{ 
+                              backgroundColor: customization.secondaryColor,
+                              color: customization.primaryColor
+                            }}
+                          >
+                            {language}
+                          </span>
                         ))}
                       </div>
                     </div>
