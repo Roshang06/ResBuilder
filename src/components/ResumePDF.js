@@ -8,6 +8,21 @@ import {
   Font,
 } from "@react-pdf/renderer";
 
+Font.register({
+    family: 'Arial',
+    src: 'https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf',
+  });
+  
+  Font.register({
+    family: 'Helvetica',
+    src: 'https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf',
+  });
+  
+  Font.register({
+    family: 'Georgia',
+    src: 'https://fonts.gstatic.com/s/merriweather/v21/u-4n0qyriQwlOrhSvowK_l52_wFpXw.ttf',
+  });
+
 // Create a component for the PDF output
 export const ResumePDF = ({ resume, format, customization }) => {
   // Create styles based on the selected format and customization
