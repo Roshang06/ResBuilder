@@ -366,9 +366,11 @@ const ResumeEditor = () => {
       </button>
       
       {/* Delete Resume Button */}
-      <button className="delete-btn" onClick={showDeleteConfirmation}>
-        Delete Resume
-      </button>
+      <div>
+        <button className="delete-btn" onClick={showDeleteConfirmation}>
+          Delete Resume
+        </button>
+      </div>
 
       {/* Delete Confirmation Popup */}
       {showDeleteConfirm && (
