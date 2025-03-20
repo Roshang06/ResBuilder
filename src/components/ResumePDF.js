@@ -8,19 +8,69 @@ import {
   Font,
 } from "@react-pdf/renderer";
 
+// Register all font variants
 Font.register({
     family: 'Arial',
-    src: 'https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf',
+    fonts: [
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 700 }, // Bold
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOkCnqEu92Fr1Mu51xIIzg.ttf', fontStyle: 'italic' }, // Italic
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOjCnqEu92Fr1Mu51TzBic6CsE.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    ]
   });
   
-  Font.register({
-    family: 'Helvetica',
-    src: 'https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf',
-  });
-  
+  // Georgia
   Font.register({
     family: 'Georgia',
-    src: 'https://fonts.gstatic.com/s/merriweather/v21/u-4n0qyriQwlOrhSvowK_l52_wFpXw.ttf',
+    fonts: [
+      { src: 'https://fonts.gstatic.com/s/librebaskerville/v9/kmKnZrc3Hgbbcjq75U4uslyuy4kn0qNZaxM.ttf' }, // Regular
+      { src: 'https://fonts.gstatic.com/s/librebaskerville/v9/kmKiZrc3Hgbbcjq75U4uslyuy4kn0qviTgY3KcU.ttf', fontWeight: 700 }, // Bold
+      { src: 'https://fonts.gstatic.com/s/librebaskerville/v9/kmKhZrc3Hgbbcjq75U4uslyuy4kn0qNcWx8QCQ.ttf', fontStyle: 'italic' }, // Italic
+    ]
+  });
+  
+  // Times New Roman (using a similar serif font)
+  Font.register({
+    family: 'Times New Roman',
+    fonts: [
+      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRVQgYoZZY2vCFuvAFWzro.ttf' }, // Regular
+      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRSQgYoZZY2vCFuvAnt66qSVy8.ttf', fontWeight: 700 }, // Bold
+      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRTQgYoZZY2vCFuvAFT_rm1cgT9rQ.ttf', fontStyle: 'italic' }, // Italic
+      { src: 'https://fonts.gstatic.com/s/ptserif/v12/EJRQQgYoZZY2vCFuvAFT9gaQZynfpFA.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    ]
+  });
+  
+  // Helvetica (using a similar sans-serif font)
+  Font.register({
+    family: 'Helvetica',
+    fonts: [
+      { src: 'https://fonts.gstatic.com/s/opensans/v18/mem8YaGs126MiZpBA-UFVZ0e.ttf' }, // Regular
+      { src: 'https://fonts.gstatic.com/s/opensans/v18/mem5YaGs126MiZpBA-UN7rgOUuhs.ttf', fontWeight: 700 }, // Bold
+      { src: 'https://fonts.gstatic.com/s/opensans/v18/mem6YaGs126MiZpBA-UFUK0Zdcg.ttf', fontStyle: 'italic' }, // Italic
+      { src: 'https://fonts.gstatic.com/s/opensans/v18/memnYaGs126MiZpBA-UFUKWiUNhrIqY.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    ]
+  });
+  
+  // Roboto
+  Font.register({
+    family: 'Roboto',
+    fonts: [
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxP.ttf' }, // Regular
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 700 }, // Bold
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOkCnqEu92Fr1Mu51xIIzg.ttf', fontStyle: 'italic' }, // Italic
+      { src: 'https://fonts.gstatic.com/s/roboto/v27/KFOjCnqEu92Fr1Mu51TzBic6CsE.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    ]
+  });
+  
+  // Montserrat
+  Font.register({
+    family: 'Montserrat',
+    fonts: [
+      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf' }, // Regular
+      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTURjIg1_i6t8kCHKm45_dJE3gnD-w.ttf', fontWeight: 700 }, // Bold
+      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUPjIg1_i6t8kCHKm459WxZcgvz8fZwnCo.ttf', fontStyle: 'italic' }, // Italic
+      { src: 'https://fonts.gstatic.com/s/montserrat/v15/JTUPjIg1_i6t8kCHKm459WxZcgvz_PZ1.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    ]
   });
 
 // Create a component for the PDF output
@@ -102,6 +152,7 @@ export const ResumePDF = ({ resume, format, customization }) => {
       fontStyle: "italic",
     },
     role: {
+      fontFamily: customization.fontFamily.split(",")[0].trim(),
       fontStyle: "italic",
       marginBottom: 4,
     },

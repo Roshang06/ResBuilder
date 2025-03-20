@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import { pdf } from '@react-pdf/renderer';
 import "../styles/ResumeFormat.css";
 
 // Import the PDF rendering components (you'll need to create these)
@@ -14,6 +15,7 @@ const ResumeFormat = () => {
   const [loading, setLoading] = useState(true);
   const [resume, setResume] = useState(null);
   const [selectedFormat, setSelectedFormat] = useState(null);
+  const [pdfError, setPdfError] = useState(null);
   const [customization, setCustomization] = useState({
     primaryColor: "#1a73e8",
     secondaryColor: "#f1f3f4",
@@ -122,6 +124,61 @@ const ResumeFormat = () => {
     return <div className="loading">Loading resume data...</div>;
   }
 
+  const handleDirectDownload = async () => {
+    try {
+      setPdfError(null); // Clear any previous errors
+      const blob = await pdf(
+        <ResumePDF
+          resume={resume}
+          format={selectedFormat}
+          customization={customization}
+        />
+      ).toBlob();
+      
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${resume.applicantName}_Resume.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Clean up
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      setPdfError(error.message);
+      
+      // Try fallback to a default font
+      try {
+        // Set a fallback font
+        const fallbackCustomization = {
+          ...customization,
+          fontFamily: "Arial, sans-serif"
+        };
+        
+        const blob = await pdf(
+          <ResumePDF
+            resume={resume}
+            format={selectedFormat}
+            customization={fallbackCustomization}
+          />
+        ).toBlob();
+        
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${resume.applicantName}_Resume.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        setPdfError("Used fallback font due to font loading issues.");
+      } catch (fallbackError) {
+        setPdfError("PDF generation failed completely. Please try a different browser.");
+      }
+    }
+  };
+
   return (
     <div className="resume-format-container">
       {/* Header with back button */}
@@ -218,6 +275,12 @@ const ResumeFormat = () => {
                 <option value="spacious">Spacious</option>
               </select>
             </div>
+
+            {pdfError && (
+                <div className="error-message">
+                    Error generating PDF: {pdfError}. Try a different format or refresh the page.
+                </div>
+            )}
             
             {/* Download buttons */}
             <div className="download-section">
@@ -231,12 +294,28 @@ const ResumeFormat = () => {
                 }
                 fileName={`${resume.applicantName}_${resume.jobPosition}_Resume.pdf`}
                 className="download-btn"
+                style={{
+                    textDecoration: "none",
+                    display: "inline-block",
+                    padding: "10px 20px",
+                    backgroundColor: "#1a73e8",
+                    color: "white",
+                    borderRadius: "4px",
+                  }}
               >
-                {({ loading }) =>
-                  loading ? "Generating PDF..." : "Download PDF"
-                }
+                {({ blob, url, loading, error }) => {
+                    if (error) {
+                        setPdfError(error.message);
+                        return "Error generating PDF";
+                    }
+                    return loading ? "Generating PDF..." : "Download PDF";
+                }}
               </PDFDownloadLink>
               
+                <button onClick={handleDirectDownload} className="download-btn-fallback">
+                    Alternative Download
+                </button>
+
               <button className="format-select-btn" onClick={() => setSelectedFormat(null)}>
                 Choose Another Format
               </button>
