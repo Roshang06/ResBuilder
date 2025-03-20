@@ -204,6 +204,11 @@ const ResumeEditor = () => {
     navigate("/dashboard"); // Go back to dashboard
   };
 
+  const handleFormatPreview = async () => {
+    await saveResume(); // Save all changes first
+    navigate(`/resume-format/${id}`); // Navigate to the format selection page with the resume ID
+  };
+
   return (
     <div className="resume-editor-container">
       {/* Back button */}
@@ -355,6 +360,10 @@ const ResumeEditor = () => {
           ))}
         </div>
       </div>
+      
+      <button className="format-preview-btn" onClick={handleFormatPreview}>
+        Format & Preview Resume
+      </button>
       
       {/* Delete Resume Button */}
       <button className="delete-btn" onClick={showDeleteConfirmation}>
