@@ -16,9 +16,9 @@ Font.register({
   family: 'Arial',
   fonts: [
     { src: '/fonts/arial/arial.ttf' }, // Regular
-    { src: '/fonts/arial/arial-bold.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/arial/arial-italic.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/arial/arial-bold-italic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/arial/arial.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/arial/arial.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/arial/arial.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
@@ -26,8 +26,8 @@ Font.register({
   family: 'Georgia',
   fonts: [
     { src: '/fonts/georgia/georgia.ttf' }, // Regular
-    { src: '/fonts/georgia/georgia-bold.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/georgia/georgia-italic.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/georgia/georgia.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/georgia/georgia.ttf', fontStyle: 'italic' }, // Italic
   ]
 });
 
@@ -35,9 +35,9 @@ Font.register({
   family: 'Times New Roman',
   fonts: [
     { src: '/fonts/times/times.ttf' }, // Regular
-    { src: '/fonts/times/times-bold.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/times/times-italic.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/times/times-bold-italic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/times/times.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/times/times.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/times/times.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
@@ -45,36 +45,36 @@ Font.register({
   family: 'Helvetica',
   fonts: [
     { src: '/fonts/helvetica/helvetica.ttf' }, // Regular
-    { src: '/fonts/helvetica/helvetica-bold.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/helvetica/helvetica-oblique.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/helvetica/helvetica-bold-oblique.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/helvetica/helvetica.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/helvetica/helvetica.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/helvetica/helvetica.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
 Font.register({
   family: 'Roboto',
   fonts: [
-    { src: '/fonts/roboto/Roboto-Regular.ttf' }, // Regular
-    { src: '/fonts/roboto/Roboto-Bold.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/roboto/Roboto-Italic.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/roboto/Roboto-BoldItalic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/roboto/roboto.ttf' }, // Regular
+    { src: '/fonts/roboto/roboto.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/roboto/roboto.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/roboto/roboto.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
 Font.register({
   family: 'Montserrat',
   fonts: [
-    { src: '/fonts/montserrat/Montserrat-Regular.ttf' }, // Regular
-    { src: '/fonts/montserrat/Montserrat-Bold.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/montserrat/Montserrat-Italic.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/montserrat/Montserrat-BoldItalic.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/montserrat/montserrat.ttf' }, // Regular
+    { src: '/fonts/montserrat/montserrat.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/montserrat/montserrat.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/montserrat/montserrat.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
 // Register fallback font that will always work
 Font.register({
   family: 'Fallback',
-  src: '/fonts/roboto/Roboto-Regular.ttf'
+  src: '/fonts/roboto.ttf'
 });
 
 // Helper function to get a safely available font

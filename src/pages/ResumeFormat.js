@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BlobProvider } from "@react-pdf/renderer";
 import { pdf } from '@react-pdf/renderer';
 import "../styles/ResumeFormat.css";
 
@@ -130,12 +130,13 @@ const ResumeFormat = () => {
     return <div className="loading">Loading resume data...</div>;
   }
 
-  const handleDirectDownload = async () => {
+  // Function to open the PDF in a new tab
+  const openPdfInNewTab = async () => {
     setPdfStatus('generating');
     setPdfError(null);
     
     try {
-      // First attempt with selected fonts
+      // Generate PDF blob
       const blob = await pdf(
         <ResumePDF
           resume={resume}
@@ -144,19 +145,19 @@ const ResumeFormat = () => {
         />
       ).toBlob();
       
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${resume.applicantName}_Resume.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Create a blob URL and open it in new tab
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, '_blank');
+      
+      // Clean up the blob URL after a delay to ensure it loads
+      setTimeout(() => {
+        URL.revokeObjectURL(blobUrl);
+      }, 30000);
       
       setPdfStatus('success');
     } catch (error) {
       console.error("Error generating PDF:", error);
-      setPdfError("Attempting with fallback fonts...");
+      setPdfError("Failed to generate PDF with selected fonts. Trying fallback...");
       setPdfStatus('error');
       
       // Try with fallback fonts
@@ -175,14 +176,12 @@ const ResumeFormat = () => {
           />
         ).toBlob();
         
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${resume.applicantName}_Resume_Fallback.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        
+        setTimeout(() => {
+          URL.revokeObjectURL(blobUrl);
+        }, 30000);
         
         setPdfStatus('success');
         setPdfError("Used fallback font due to font loading issues, but PDF generated successfully.");
@@ -299,22 +298,16 @@ const ResumeFormat = () => {
             
             {pdfStatus === 'success' && !pdfError && (
                 <div className="status-message success-message">
-                    PDF generated successfully!
+                    PDF generated successfully! Check your new tab.
                 </div>
             )}
             
-            {/* Download buttons */}
+            {/* Preview PDF buttons */}
             <div className="download-section">
-              <PDFDownloadLink
-                document={
-                  <ResumePDF
-                    resume={resume}
-                    format={selectedFormat}
-                    customization={customization}
-                  />
-                }
-                fileName={`${resume.applicantName}_${resume.jobPosition}_Resume.pdf`}
+              <button 
+                onClick={openPdfInNewTab} 
                 className="download-btn"
+                disabled={pdfStatus === 'generating'}
                 style={{
                   textDecoration: "none",
                   display: "inline-block",
@@ -322,26 +315,38 @@ const ResumeFormat = () => {
                   backgroundColor: "#1a73e8",
                   color: "white",
                   borderRadius: "4px",
+                  border: "none",
+                  cursor: pdfStatus === 'generating' ? "wait" : "pointer"
                 }}
               >
-                {({ blob, url, loading, error }) => {
-                  if (loading) {
-                    return "Generating PDF...";
-                  }
-                  if (error) {
-                    return "Download PDF (React-PDF)";
-                  }
-                  return "Download PDF";
-                }}
-              </PDFDownloadLink>
-              
-              <button 
-                onClick={handleDirectDownload} 
-                className="download-btn-fallback"
-                disabled={pdfStatus === 'generating'}
-              >
-                {pdfStatus === 'generating' ? 'Generating PDF...' : 'Alternative Download'}
+                {pdfStatus === 'generating' ? 'Generating PDF...' : 'Preview PDF in New Tab'}
               </button>
+              
+              {/* BlobProvider as an alternative method */}
+              <BlobProvider
+                document={
+                  <ResumePDF
+                    resume={resume}
+                    format={selectedFormat}
+                    customization={{
+                      ...customization,
+                      fontFamily: "Fallback" // Always using safe font for this option
+                    }}
+                  />
+                }
+              >
+                {({ blob, url, loading, error }) => (
+                  <button
+                    onClick={() => {
+                      if (url) window.open(url, '_blank');
+                    }}
+                    disabled={loading || !url}
+                    className="download-btn-fallback"
+                  >
+                    {loading ? 'Preparing Alternative View...' : 'Alternative Preview (Fallback Font)'}
+                  </button>
+                )}
+              </BlobProvider>
 
               <button className="format-select-btn" onClick={() => setSelectedFormat(null)}>
                 Choose Another Format
