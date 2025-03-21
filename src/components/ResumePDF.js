@@ -16,9 +16,9 @@ Font.register({
   family: 'Arial',
   fonts: [
     { src: '/fonts/arial/arial.ttf' }, // Regular
-    { src: '/fonts/arial/arial.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/arial/arial.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/arial/arial.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/arial/arialbd.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/arial/ariali.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/arial/arialbi.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
@@ -26,8 +26,9 @@ Font.register({
   family: 'Georgia',
   fonts: [
     { src: '/fonts/georgia/georgia.ttf' }, // Regular
-    { src: '/fonts/georgia/georgia.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/georgia/georgia.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/georgia/georgiab.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/georgia/georgiai.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/georgia/georgiaz.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
@@ -35,46 +36,46 @@ Font.register({
   family: 'Times New Roman',
   fonts: [
     { src: '/fonts/times/times.ttf' }, // Regular
-    { src: '/fonts/times/times.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/times/times.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/times/times.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/times/timesbd.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/times/timesi.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/times/timesbi.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
 Font.register({
-  family: 'Helvetica',
+  family: 'Calibri',
   fonts: [
-    { src: '/fonts/helvetica/helvetica.ttf' }, // Regular
-    { src: '/fonts/helvetica/helvetica.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/helvetica/helvetica.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/helvetica/helvetica.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/calibri/calibri.ttf' }, // Regular
+    { src: '/fonts/calibri/calibrib.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/calibri/calibrii.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/calibri/calibriz.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
 Font.register({
-  family: 'Roboto',
+  family: 'Tahoma',
   fonts: [
-    { src: '/fonts/roboto/roboto.ttf' }, // Regular
-    { src: '/fonts/roboto/roboto.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/roboto/roboto.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/roboto/roboto.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/tahoma/tahoma.ttf' }, // Regular
+    { src: '/fonts/tahoma/tahomabd.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/tahoma/tahoma.ttf', fontStyle: 'italic' }, // Italic (using regular as fallback since Tahoma doesn't have a true italic)
+    { src: '/fonts/tahoma/tahomabd.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic (using bold as fallback)
   ]
 });
 
 Font.register({
-  family: 'Montserrat',
+  family: 'Verdana',
   fonts: [
-    { src: '/fonts/montserrat/montserrat.ttf' }, // Regular
-    { src: '/fonts/montserrat/montserrat.ttf', fontWeight: 700 }, // Bold
-    { src: '/fonts/montserrat/montserrat.ttf', fontStyle: 'italic' }, // Italic
-    { src: '/fonts/montserrat/montserrat.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
+    { src: '/fonts/verdana/verdana.ttf' }, // Regular
+    { src: '/fonts/verdana/verdanab.ttf', fontWeight: 700 }, // Bold
+    { src: '/fonts/verdana/verdanai.ttf', fontStyle: 'italic' }, // Italic
+    { src: '/fonts/verdana/verdanaz.ttf', fontWeight: 700, fontStyle: 'italic' } // Bold Italic
   ]
 });
 
 // Register fallback font that will always work
 Font.register({
   family: 'Fallback',
-  src: '/fonts/roboto.ttf'
+  src: '/fonts/tahoma/tahoma.ttf'
 });
 
 // Helper function to get a safely available font
@@ -83,7 +84,7 @@ const getSafeFont = (requestedFont) => {
   const primaryFont = requestedFont.split(",")[0].trim();
   
   // Check if it's one of our registered fonts
-  const availableFonts = ['Arial', 'Georgia', 'Times New Roman', 'Helvetica', 'Roboto', 'Montserrat'];
+  const availableFonts = ['Arial', 'Georgia', 'Times New Roman', 'Calibri', 'Tahoma', 'Verdana'];
   
   if (availableFonts.includes(primaryFont)) {
     return primaryFont;

@@ -43,7 +43,7 @@ const ResumeFormat = () => {
       preview: "/images/formats/creative.jpg",
       primaryColor: "#ff5722",
       secondaryColor: "#fbe9e7",
-      fontFamily: "Montserrat, sans-serif",
+      fontFamily: "Verdana, sans-serif",
     },
     {
       id: "minimal",
@@ -52,7 +52,7 @@ const ResumeFormat = () => {
       preview: "/images/formats/minimal.png",
       primaryColor: "#424242",
       secondaryColor: "#f5f5f5",
-      fontFamily: "Roboto, sans-serif",
+      fontFamily: "Tahoma, sans-serif",
     },
     {
       id: "executive",
@@ -165,7 +165,7 @@ const ResumeFormat = () => {
         // Use a reliable fallback font configuration
         const fallbackCustomization = {
           ...customization,
-          fontFamily: "Roboto, sans-serif" // Using our locally bundled Roboto
+          fontFamily: "Tahoma, sans-serif" // Using our locally bundled Tahoma
         };
         
         const blob = await pdf(
@@ -258,11 +258,11 @@ const ResumeFormat = () => {
                 onChange={(e) => handleCustomizationChange("fontFamily", e.target.value)}
               >
                 <option value="Arial, sans-serif">Arial</option>
-                <option value="Helvetica, sans-serif">Helvetica</option>
+                <option value="Calibri, sans-serif">Calibri</option>
                 <option value="Georgia, serif">Georgia</option>
                 <option value="Times New Roman, serif">Times New Roman</option>
-                <option value="Roboto, sans-serif">Roboto</option>
-                <option value="Montserrat, sans-serif">Montserrat</option>
+                <option value="Tahoma, sans-serif">Tahoma</option>
+                <option value="Verdana, sans-serif">Verdana</option>
               </select>
             </div>
             
