@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Auth.css"; // Import CSS
@@ -27,10 +27,21 @@ const Login = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Google Login Error:", err.message);
+      setError("Could not sign in with Google. Please try again.");
+    }
+  };
+
   return (
     <div className="auth-container">
       <h2>Login</h2>
-      {error && <p className="error">{error}</p>} {/* Display error message */}
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleLogin}>
         <input
           type="email"
@@ -46,6 +57,16 @@ const Login = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <div className="auth-divider">
+        <span>or</span>
+      </div>
+      <button 
+        type="button" 
+        className="google-button" 
+        onClick={handleGoogleLogin}
+      >
+        Login with Google
+      </button>
       <p>
         Don't have an account? <Link to="/">Sign Up</Link>
       </p>

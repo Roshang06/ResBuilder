@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Auth.css";
@@ -13,6 +13,8 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
+
+  
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -34,6 +36,17 @@ const Signup = () => {
     }
   };
 
+  const handleGoogleSignup = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Google Signup Error:", err.message);
+      setError("Could not sign in with Google. Please try again.");
+    }
+  };
+
   return (
     <div className="auth-container">
       <h2>Sign Up</h2>
@@ -43,6 +56,16 @@ const Signup = () => {
         <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Sign Up</button>
       </form>
+      <div className="auth-divider">
+        <span>or</span>
+      </div>
+      <button 
+        type="button" 
+        className="google-button" 
+        onClick={handleGoogleSignup}
+      >
+        Sign up with Google
+      </button>
       <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>
   );
