@@ -1,3 +1,6 @@
+# Resume Builder Web Application
+This is a web application made using React + Firebase. React documentation is included below. The app allows users to create an account, login with google or email, create and store projects on their account using google firestore, and export the resume's that are created as a pdf file.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
