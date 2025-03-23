@@ -46,7 +46,7 @@ const ResumeEditor = () => {
     languages: [], // Array for multiple languages
   });
 
-  // Fetch resume details from Firestore
+  // Get the correct resume details from Firestore
   useEffect(() => {
     const fetchResume = async () => {
       const docRef = doc(db, "projects", id);

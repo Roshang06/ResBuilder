@@ -22,7 +22,7 @@ const Signup = () => {
     } catch (err) {
       console.error("Signup Error:", err.message); // Logs the full error for debugging
 
-        // Extracting user-friendly error messages
+        // Converting the firebase messages to more user friendly messages
         if (err.code === "auth/weak-password") {
           setError("Password must be at least 6 characters.");
         } else if (err.code === "auth/email-already-in-use") {
