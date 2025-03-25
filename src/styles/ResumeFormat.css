@@ -109,7 +109,7 @@
     margin-top: 20px;
   }
   
-  /* Customization sidebar */
+  /* Customization skibidi sidebar */
   .customization-sidebar {
     width: 280px;
     flex-shrink: 0;
@@ -199,7 +199,7 @@
     background-color: rgba(26, 115, 232, 0.1);
   }
   
-  /* Resume preview */
+  /* Resume skibidi preview */
   .resume-preview-container {
     flex-grow: 1;
     background-color: #f0f0f0;
@@ -213,7 +213,7 @@
   .resume-preview {
     width: 100%;
     max-width: 800px;
-    min-height: 1123px; /* A4 height ratio */
+    min-height: 1123px; /* A4 skibidi height ratio */
     background-color: white;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     position: relative;

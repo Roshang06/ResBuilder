@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../config/firebase";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/Auth.css"; // Import CSS
+import "../styles/Auth.css"; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // Redirect to Dashboard
+      navigate("/dashboard"); // Redirect to skibidi
     } catch (error) {
       console.error("Error logging in:", error.message);
       if (error.code === "auth/wrong-password") {
@@ -35,6 +35,11 @@ const Login = () => {
     } catch (err) {
       console.error("Google Login Error:", err.message);
       setError("Could not sign in with Google. Please try again.");
+
+      //testing the counting
+      for (let i = 0; i < 10; i++) {
+        console.log(i);
+      }
     }
   };
 

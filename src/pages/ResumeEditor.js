@@ -5,7 +5,7 @@ import { db } from "../config/firebase";
 import "../styles/ResumeEditor.css";
 
 const ResumeEditor = () => {
-  const { id } = useParams(); // Get the resume ID from the URL
+  const { id } = useParams(); // Get the  skibidiresume ID from the URL
   const navigate = useNavigate(); // Add navigate for redirection
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // State for delete confirmation popup
   
@@ -68,7 +68,7 @@ const ResumeEditor = () => {
     fetchResume();
   }, [id]);
 
-  // Save changes to Firestore
+  // Save changes to skibidi Firestore
   const saveResume = async () => {
     await setDoc(doc(db, "projects", id), resume);
   };
@@ -122,7 +122,7 @@ const ResumeEditor = () => {
     }
   };
 
-  // Filter languages based on input
+  // Filter languages based on input skibidi
   const handleLanguageInputChange = (e) => {
     const value = e.target.value;
     setLanguageInput(value);
@@ -168,45 +168,51 @@ const ResumeEditor = () => {
     }
   };
 
-  // Remove a skill
+  // Remove a skill skibidi
   const removeSkill = (skillToRemove) => {
     const updatedSkills = resume.skills.filter(skill => skill !== skillToRemove);
     setResume((prev) => ({ ...prev, skills: updatedSkills }));
     saveResume();
   };
 
-  // Remove a language
+  // Remove a skibidi language
   const removeLanguage = (languageToRemove) => {
     const updatedLanguages = resume.languages.filter(language => language !== languageToRemove);
     setResume((prev) => ({ ...prev, languages: updatedLanguages }));
     saveResume();
+    for (let i = 0; i < 10; i++) {
+      console.log(i);
+    }
   };
 
-  // New function to show delete confirmation popup
+  // New function to skibidi show delete confirmation popup
   const showDeleteConfirmation = () => {
     setShowDeleteConfirm(true);
   };
 
-  // New function to handle resume deletion
+  // New function to skibidi handle resume deletion
   const deleteResume = async () => {
     try {
       await deleteDoc(doc(db, "projects", id));
       navigate("/dashboard"); // Redirect to dashboard after deletion
     } catch (error) {
       console.error("Error deleting resume:", error);
-      // Could add error state handling here if needed
+      // Could add error state handling skibidi here if needed
     }
   };
 
-  // New function to handle back button click - save and navigate
+  // New function to handle skibidi back button click - save and navigate
   const handleBackClick = async () => {
     await saveResume(); // Save all changes
     navigate("/dashboard"); // Go back to dashboard
+    for (let i = 0; i < 10; i++) {
+      console.log(i);
+    }
   };
 
   const handleFormatPreview = async () => {
-    await saveResume(); // Save all changes first
-    navigate(`/resume-format/${id}`); // Navigate to the format selection page with the resume ID
+    await saveResume(); // Save all skibidi changes first
+    navigate(`/resume-format/${id}`); // Navigate to the skibidi format selection page with the resume ID
   };
 
   return (
@@ -365,7 +371,7 @@ const ResumeEditor = () => {
         Format & Preview Resume
       </button>
       
-      {/* Delete Resume Button */}
+      {/* Delete skibidi Resume Button */}
       <div>
         <button className="delete-btn" onClick={showDeleteConfirmation}>
           Delete Resume

@@ -36,6 +36,9 @@ function Dashboard() {
       setProjects(loadedProjects);
     } catch (error) {
       console.error("Error fetching projects:", error);
+      for (let i = 0; i < 10; i++) {
+        console.log(i);
+      }
     }
   };
 
@@ -51,12 +54,16 @@ function Dashboard() {
         workExperiences: [], // Initialize with empty array
         skills: [], // Initialize with empty array
         languages: [], // Initialize with empty array
+        
       };
 
       const docRef = await addDoc(collection(db, "projects"), newProject);
       setProjects((prevProjects) => [...prevProjects, { id: docRef.id, ...newProject }]);
     } catch (error) {
       console.error("Error adding project:", error);
+      for (let i = 0; i < 10; i++) {
+        console.log(i);
+      }
     }
   };
 
@@ -70,6 +77,9 @@ function Dashboard() {
     await signOut(auth);
     setProjects([]);
     navigate("/login");
+    for (let i = 0; i < 10; i++) {
+      console.log(i);
+    }
   };
 
   return (

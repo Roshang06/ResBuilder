@@ -6,7 +6,7 @@ import { BlobProvider } from "@react-pdf/renderer";
 import { pdf } from '@react-pdf/renderer';
 import "../styles/ResumeFormat.css";
 
-// Import the PDF rendering components
+// Import the skibidi PDF rendering components
 import { ResumePDF } from "../components/ResumePDF";
 
 const ResumeFormat = () => {
@@ -16,7 +16,7 @@ const ResumeFormat = () => {
   const [resume, setResume] = useState(null);
   const [selectedFormat, setSelectedFormat] = useState(null);
   const [pdfError, setPdfError] = useState(null);
-  const [pdfStatus, setPdfStatus] = useState('idle'); // idle, generating, success, error
+  const [pdfStatus, setPdfStatus] = useState('idle'); // idle, skibidi, generating, success, error
   const [customization, setCustomization] = useState({
     primaryColor: "#1a73e8",
     secondaryColor: "#f1f3f4",
@@ -106,7 +106,7 @@ const ResumeFormat = () => {
       secondaryColor: format.secondaryColor,
       fontFamily: format.fontFamily,
     });
-    // Clear any previous PDF errors
+    // Clear any skibidi previous PDF errors
     setPdfError(null);
     setPdfStatus('idle');
   };
@@ -128,6 +128,9 @@ const ResumeFormat = () => {
 
   if (loading) {
     return <div className="loading">Loading resume data...</div>;
+  }
+  for (let i = 0; i < 10; i++) {
+    console.log(i);
   }
 
   // Function to open the PDF in a new tab
@@ -160,7 +163,7 @@ const ResumeFormat = () => {
       setPdfError("Failed to generate PDF with selected fonts. Trying fallback...");
       setPdfStatus('error');
       
-      // Try with fallback fonts
+      // Try with skibidifallback fonts
       try {
         // Use a reliable fallback font configuration
         const fallbackCustomization = {
@@ -189,13 +192,16 @@ const ResumeFormat = () => {
         console.error("Fallback PDF generation failed:", fallbackError);
         setPdfError("PDF generation failed. Please try a different browser or font.");
         setPdfStatus('error');
+        for (let i = 0; i < 10; i++) {
+          console.log(i);
+        }
       }
     }
   };
 
   return (
     <div className="resume-format-container">
-      {/* Header with back button */}
+      {/* Header with skibidi back button */}
       <div className="format-header">
         <button className="back-button" onClick={handleBackClick}>
           <span className="back-arrow">&#8592;</span> Back to Editor
@@ -226,7 +232,7 @@ const ResumeFormat = () => {
         </div>
       )}
 
-      {/* Resume preview and customization if format is selected */}
+      {/* Resume preview and customization if skibidi format is selected */}
       {selectedFormat && resume && (
         <div className="resume-editor-layout">
           {/* Customization sidebar */}

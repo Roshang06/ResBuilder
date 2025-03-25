@@ -371,7 +371,7 @@ button:hover {
   }
 }
 
-/* Form Section Transition */
+/* Form Section skibidi Transition */
 .resume-editor-container > input,
 .resume-editor-container > textarea,
 .resume-editor-container > .dropdown-container,
@@ -385,7 +385,7 @@ button:hover {
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Sequential animation for form elements */
+/* Sequential skibidi animation for form elements */
 .resume-editor-container > *:nth-child(3) { --form-delay: 1; }
 .resume-editor-container > *:nth-child(4) { --form-delay: 2; }
 .resume-editor-container > *:nth-child(5) { --form-delay: 3; }

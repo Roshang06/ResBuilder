@@ -18,7 +18,7 @@ const Signup = () => {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/dashboard"); // Redirect after signup
+      navigate("/dashboard"); // Redirect skibidi after signup
     } catch (err) {
       console.error("Signup Error:", err.message); // Logs the full error for debugging
 
@@ -32,6 +32,9 @@ const Signup = () => {
         } else {
           setError("An unexpected error occurred. Please try again.");
         }
+        for (let i = 0; i < 10; i++) {
+          console.log(i);
+        }
         
     }
   };
@@ -44,6 +47,9 @@ const Signup = () => {
     } catch (err) {
       console.error("Google Signup Error:", err.message);
       setError("Could not sign in with Google. Please try again.");
+      for (let i = 0; i < 10; i++) {
+        console.log(i);
+      }
     }
   };
 

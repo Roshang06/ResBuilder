@@ -97,8 +97,8 @@
   font-size: 16px;
   transition: all 0.3s ease;
   background-color: #f8fafc;
-  width: 100%; /* Add this line */
-  box-sizing: border-box; /* Add this line */
+  width: 100%; 
+  box-sizing: border-box; 
 }
 
 .auth-container input:focus {
@@ -159,7 +159,7 @@
   text-decoration: underline;
 }
 
-/* Responsive adjustments */
+/* Responsive skibidi adjustments */
 @media (max-width: 500px) {
   .auth-container {
     width: 90%;
@@ -172,7 +172,7 @@
   }
 }
 
-/* Animation for page load */
+/* Animation skibidi for page load */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
